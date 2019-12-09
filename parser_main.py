@@ -7,8 +7,9 @@
 import csv
 import opml
 import re
+import markdown
 
-md = markdown.Markdown()
+#md = markdown.markdown()
 
 typenames = ["OVERVIEW","RESOURCES","CHAPTER","VIDEO","EXAMPLES", "EXAMPLES ","EXEMPLARY","CAUTIONARY","#ex.g","#ex.b","goals","ATTITUDES__","__ATTITUDES__","ACQUISITION__","ACQUISITION","APPLICATION__","APPLICATION","ELEMENTS","Readings","Clicker","Discussion","Exercises","Practice","ASSESSMENTS"]
 
@@ -23,8 +24,8 @@ On terminal (for my mac at least), run "ipython OPML_to_CSV.py" in the same dire
 A CSV will be written to the same directory
 """
 
-OPML_filename = "meme.opml" #Make sure this is a string and ends .opml EX: "SSS_04_01_19.opml"
-desired_CSV_name = "out.csv" #Make sure this ends .csv
+OPML_filename = "dynalist.opml" #Make sure this is a string and ends .opml EX: "SSS_04_01_19.opml"
+desired_CSV_name = "output.csv" #Make sure this ends .csv
 
 def convert_to_CSV_help(curr_outline, current_topic="", numer="", current_type="", level_list=[], 
                         highest_level=True, nest="", h=0, sp2014=0, answer=0, pp=0, parent='', 
