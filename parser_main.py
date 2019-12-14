@@ -11,7 +11,7 @@ import markdown
 
 #md = markdown.markdown()
 
-typenames = ["OVERVIEW","RESOURCES","CHAPTER","VIDEO","EXAMPLES", "EXAMPLES ","EXEMPLARY","CAUTIONARY","#ex.g","#ex.b","goals","ATTITUDES__","__ATTITUDES__","ACQUISITION__","ACQUISITION","APPLICATION__","APPLICATION","ELEMENTS","Readings","Clicker","Discussion","Exercises","Practice","ASSESSMENTS"]
+typenames = ["OVERVIEW", "OVERVIEW:", "RESOURCES","CHAPTER","VIDEO","EXAMPLES", "EXAMPLES ","EXEMPLARY","CAUTIONARY","#ex.g","#ex.b","goals","ATTITUDES__","__ATTITUDES__","ACQUISITION__","ACQUISITION","APPLICATION__","APPLICATION","ELEMENTS","Readings","Clicker","Discussion","Exercises","Practice","ASSESSMENTS"]
 
 
 """
@@ -54,11 +54,11 @@ def convert_to_CSV_help(curr_outline, current_topic="", numer="", current_type="
     references = []
     dec_refers = []
     dec_refs = ''
-    valid = True
+
     if len(curr_outline) == 0:
         return
     if highest_level:
-        for i in range(6, 34): #this can be changed, this makes sure to only through topics as the dynalist is currently written
+        for i in range(6, 33): #this can be changed, this makes sure to only through topics as the dynalist is currently written
             startCSV = False
             usetext = curr_outline[i].text
             current_hashtags = [x for x in usetext.split() if x.startswith('#')]
@@ -108,127 +108,242 @@ def convert_to_CSV_help(curr_outline, current_topic="", numer="", current_type="
                     usetext = usetext.replace(each_hashtag, "") #removing hashtags from usetext
                 curr_hashtags = ', '.join(current_hashtags)
                 newtext = re.sub(r'\*{2}([\S\s]+)\*{2}', r'<strong>\1</strong>', usetext)
-                newtext = re.sub(r'\_{2}([\S\s]+)\_{2}', r'<strong>\1</strong>', newtext)
+                newtext = re.sub(r'\_{2}([\S\s]+)\_{2}', r'<em>\1</em>', newtext)
+                newtext = re.sub(r'\&', '&amp;', newtext)
 
-                if startCSV and valid: #actually writing to the CSV
+                if startCSV: #actually writing to the CSV
                     writer.writerow(['', '', current_type, 'topic', '', '', new_nest, newtext, '', '', '', '']+ [curr_hashtags])
                     line_number += 1
 
             new_parent = usetext
             new_depth = len(curr_outline[i]) #recursive call
-            convert_to_CSV_help(curr_outline[i], new_topic, new_numer, current_type, level_temp, False, 
+            convert_children(curr_outline[i], new_topic, new_numer, current_type, level_temp, False, 
                                 nest=new_nest, parent=new_parent, 
                                 depth=new_depth, parent_ht=new_parent_ht, grandparent_ht=parent_ht, 
                                 topic_number=new_topic_number, arabic=arabic_tag) 
-    else:   
-        for i in range(len(curr_outline)): #iterate through current outline
-            usetext = curr_outline[i].text
-            current_hashtags = [x for x in usetext.split() if x.startswith('#')]
-            new_parent_ht = [ht for ht in current_hashtags if ht != '#L1' and ht != '#L2']
-            typeset = set(typenames).intersection(usetext.split(" "))
-            if typeset: #converting a few tags
-                current_type = list(typeset)[0]
-                if current_type == '#ex.g':
-                    current_type = 'Exemplary Quotes'
-                elif current_type == '#ex.b':
-                    current_type = 'Cautionary Quotes: Mistakes, Misconceptions, &amp; Misunderstanding'
-                else:
-                    current_type = re.sub(r'[^a-zA-Z,:& ]+', '', current_type)
-                    current_type = current_type.lower().capitalize()
+    return
+    # else:   
+    #     for i in range(len(curr_outline)): #iterate through current outline
+    #         usetext = curr_outline[i].text
+    #         current_hashtags = [x for x in usetext.split() if x.startswith('#')]
+    #         new_parent_ht = [ht for ht in current_hashtags if ht != '#L1' and ht != '#L2']
+    #         typeset = set(typenames).intersection(usetext.split(" "))
+    #         if typeset: #converting a few tags
+    #             current_type = list(typeset)[0]
+    #             if current_type == '#ex.g':
+    #                 current_type = 'Exemplary Quotes'
+    #             elif current_type == '#ex.b':
+    #                 current_type = 'Cautionary Quotes: Mistakes, Misconceptions, &amp; Misunderstanding'
+    #             else:
+    #                 current_type = re.sub(r'[^a-zA-Z,:& ]+', '', current_type)
+    #                 current_type = current_type.lower().capitalize()
 
 
-            new_nest = nest + '.' + str(i+1)
-            new_topic_number = topic_number
-            level_temp = level_list + [i]
-            level_updated = level_temp + [-1, -1, -1, -1, -1, -1]
+    #         new_nest = nest + '.' + str(i+1)
+    #         new_topic_number = topic_number
+    #         level_temp = level_list + [i]
+    #         level_updated = level_temp + [-1, -1, -1, -1, -1, -1]
             
-            display = '' #changing display values
-            if len(nest) <= 2:
-                display = 'h2'
-            else:
-                display = 'snippet'
+    #         display = '' #changing display values
+    #         if len(nest) <= 2:
+    #             display = 'h2'
+    #         else:
+    #             display = 'snippet'
             
-            refs = ''
-            ret_hash = []
-            references = []
-            dec_refers = []
-            dec_refs = ''
-            for idx in range(len(current_hashtags)):
-                if re.match(r'(#[A-Z]{2}\.[A-Z]\.\d)', current_hashtags[idx]):
-                    #print(current_hashtags[idx])
-                    if "CONCEPT ACQUISITION" in parent:# or "CONCEPT APPLICATION" in parent or "ATTITUDES" in parent:
-                        if current_hashtags[idx] not in declared_refs:
-                            dec_refers += [current_hashtags[idx]]
-                            declared_refs += [current_hashtags[idx]]
-                            first = '#' + str(dec_refers[0])
-                            valid=True
-                            dec_refers = [first] + dec_refers[1:]
-                            dec_refs = ', #'.join(dec_refers)
+    #         refs = ''
+    #         ret_hash = []
+    #         references = []
+    #         dec_refers = []
+    #         dec_refs = ''
+    #         for idx in range(len(current_hashtags)):
+    #             if re.match(r'(#[A-Z]{2}\.[A-Z]\.\d)', current_hashtags[idx]):
+    #                 #print(current_hashtags[idx])
+    #                 if "CONCEPT ACQUISITION" in parent:# or "CONCEPT APPLICATION" in parent or "ATTITUDES" in parent:
+    #                     if current_hashtags[idx] not in declared_refs:
+    #                         dec_refers += [current_hashtags[idx]]
+    #                         declared_refs += [current_hashtags[idx]]
+    #                         first = '#' + str(dec_refers[0])
+    #                         valid=True
+    #                         dec_refers = [first] + dec_refers[1:]
+    #                         dec_refs = ', #'.join(dec_refers)
                             
-                        else:
-                            references += [current_hashtags[idx]]
+    #                     else:
+    #                         references += [current_hashtags[idx]]
+    #                 else:
+    #                     references += [current_hashtags[idx]]
+
+    #             else:#adding hashtag flags
+    #                 if "#h"== current_hashtags[idx]:
+    #                     h=1
+    #                 if "#SP2014"== current_hashtags[idx]:
+    #                     sp2014=1
+    #                 if '#Answer'== current_hashtags[idx] or '#Answer:' == current_hashtags[idx]:
+    #                     answer=1
+    #                     pp=1
+    #                 if "#pp" == current_hashtags[idx]:
+    #                     pp=1
+    #                 if "#as" == current_hashtags[idx]:
+    #                     pp=1
+    #                 updated = re.sub(r'[^#a-zA-Z0-9\.]+', '', current_hashtags[idx])
+    #                 ret_hash.append(updated)
+                
+    #         arabic_tag = 0 #taking care of types of lists
+    #         bullet = abs(arabic-1)
+    #         try:
+    #             if curr_outline[i].listStyle=='arabic':
+    #                 arabic_tag = 1
+    #         except AttributeError:
+    #             pass
+                    
+    #         refs = ', '.join(references)
+            
+    #         if len(typeset) == 1 or len(typeset) == 0 or len(typeset) == 2:
+    #                 for each_hashtag in current_hashtags:
+    #                     usetext = usetext.replace(each_hashtag, "")
+    #                 newtext = re.sub(r'\*{2}([\S\s]+)\*{2}', r'<strong>\1</strong>', usetext)
+    #                 newtext = re.sub(r'\_{2}([\S\s]+)\_{2}', r'<em>\1</em>', newtext)
+    #                 steptext = re.sub(r'\&', '&amp;', newtext)
+    #                 fintext = re.sub(r'\[([\S\s]+)\]\((http(\S)+)\)', r'<a href="\2">\1</a>', steptext)
+    #                 print(usetext)
+    #                 ret_parent_ht = list(set(parent_ht + grandparent_ht))
+    #                 current_hashtags_lst = ret_hash + ret_parent_ht
+
+    #                 curr_hashtags_prime = ', '.join(current_hashtags_lst)
+    #                 curr_hashtags = ''
+    #                 if dec_refs and refs: 
+    #                     curr_hashtags = refs + ', ' + dec_refs + ', ' + curr_hashtags_prime
+    #                 elif dec_refs:
+    #                     curr_hashtags = dec_refs + ', ' + curr_hashtags_prime
+    #                 elif refs:
+    #                     curr_hashtags = refs + ', ' + curr_hashtags_prime
+                    
+    #                 else:
+    #                     curr_hashtags = curr_hashtags_prime
+    #                 #ret_hash_parent = ', '.join(ret_parent_ht)
+                 
+    #                 if valid: #writing to CSV
+    #                     writer.writerow(['', '', current_type, display, '', '', new_nest, fintext, '', '', '', '']+ [curr_hashtags])
+    #                 line_number += 1
+
+    #         new_parent = usetext
+    #         new_depth = len(curr_outline[i])
+    #         convert_to_CSV_help(curr_outline[i], current_topic, numer, current_type, level_temp, False, 
+    #                             new_nest, parent=new_parent, 
+    #                             depth=new_depth, parent_ht=new_parent_ht, grandparent_ht=parent_ht, 
+    #                             topic_number=new_topic_number, arabic=arabic_tag) 
+    # return
+
+def convert_children(curr_outline, current_topic="", numer="", current_type="", level_list=[], 
+                        highest_level=True, nest="", h=0, sp2014=0, answer=0, pp=0, parent='', 
+                        depth=0, parent_ht=[], grandparent_ht=[], topic_number=0, arabic=0):
+    global line_number
+    global declared_refs
+    for i in range(len(curr_outline)): #iterate through current outline
+        usetext = curr_outline[i].text
+        current_hashtags = [x for x in usetext.split() if x.startswith('#')]
+        new_parent_ht = [ht for ht in current_hashtags if ht != '#L1' and ht != '#L2']
+        typeset = set(typenames).intersection(usetext.split(" "))
+        if typeset: #converting a few tags
+            current_type = list(typeset)[0]
+            if current_type == '#ex.g':
+                current_type = 'Exemplary Quotes'
+            elif current_type == '#ex.b':
+                current_type = 'Cautionary Quotes: Mistakes, Misconceptions, &amp; Misunderstanding'
+            else:
+                current_type = re.sub(r'[^a-zA-Z,:& ]+', '', current_type)
+                current_type = current_type.lower().capitalize()
+
+
+        new_nest = nest + '.' + str(i+1)
+        new_topic_number = topic_number
+        level_temp = level_list + [i]
+        level_updated = level_temp + [-1, -1, -1, -1, -1, -1]
+        
+        display = '' #changing display values
+        if len(nest) <= 2:
+            display = 'h2'
+        else:
+            display = 'snippet'
+        
+        refs = ''
+        ret_hash = []
+        references = []
+        dec_refers = []
+        dec_refs = ''
+        for idx in range(len(current_hashtags)):
+            if re.match(r'(#[A-Z]{2}\.[A-Z]\.\d)', current_hashtags[idx]):
+                #print(current_hashtags[idx])
+                if "CONCEPT ACQUISITION" in parent:# or "CONCEPT APPLICATION" in parent or "ATTITUDES" in parent:
+                    if current_hashtags[idx] not in declared_refs:
+                        dec_refers += [current_hashtags[idx]]
+                        declared_refs += [current_hashtags[idx]]
+                        first = '#' + str(dec_refers[0])
+                        dec_refers = [first] + dec_refers[1:]
+                        dec_refs = ', #'.join(dec_refers)
+                        
                     else:
                         references += [current_hashtags[idx]]
+                else:
+                    references += [current_hashtags[idx]]
 
-                else:#adding hashtag flags
-                    if "#h"== current_hashtags[idx]:
-                        h=1
-                    if "#SP2014"== current_hashtags[idx]:
-                        sp2014=1
-                    if '#Answer'== current_hashtags[idx] or '#Answer:' == current_hashtags[idx]:
-                        answer=1
-                        pp=1
-                    if "#pp" == current_hashtags[idx]:
-                        pp=1
-                    if "#as" == current_hashtags[idx]:
-                        pp=1
-                    updated = re.sub(r'[^#a-zA-Z0-9\.]+', '', current_hashtags[idx])
-                    ret_hash.append(updated)
-                
-            arabic_tag = 0 #taking care of types of lists
-            bullet = abs(arabic-1)
-            try:
-                if curr_outline[i].listStyle=='arabic':
-                    arabic_tag = 1
-            except AttributeError:
-                pass
-                    
-            refs = ', '.join(references)
+            else:#adding hashtag flags
+                if "#h"== current_hashtags[idx]:
+                    h=1
+                if "#SP2014"== current_hashtags[idx]:
+                    sp2014=1
+                if '#Answer'== current_hashtags[idx] or '#Answer:' == current_hashtags[idx]:
+                    answer=1
+                    pp=1
+                if "#pp" == current_hashtags[idx]:
+                    pp=1
+                if "#as" == current_hashtags[idx]:
+                    pp=1
+                updated = re.sub(r'[^#a-zA-Z0-9\.]+', '', current_hashtags[idx])
+                ret_hash.append(updated)
             
-            if len(typeset) == 1 or len(typeset) == 0 or len(typeset) == 2:
-                    for each_hashtag in current_hashtags:
-                        usetext = usetext.replace(each_hashtag, "")
-                    newtext = re.sub(r'\*{2}([\S\s]+)\*{2}', r'<strong>\1</strong>', usetext)
-                    newtext = re.sub(r'\_{2}([\S\s]+)\_{2}', r'<strong>\1</strong>', newtext)
-                    steptext = re.sub(r'\&', '&amp;', newtext)
-                    fintext = re.sub(r'\[([\S\s]+)\]\((http(\S)+)\)', r'<a href="\2">\1</a>', steptext)
-                    print(usetext)
-                    ret_parent_ht = list(set(parent_ht + grandparent_ht))
-                    current_hashtags_lst = ret_hash + ret_parent_ht
+        arabic_tag = 0 #taking care of types of lists
+        bullet = abs(arabic-1)
+        try:
+            if curr_outline[i].listStyle=='arabic':
+                arabic_tag = 1
+        except AttributeError:
+            pass
+                
+        refs = ', '.join(references)
+        
+        if len(typeset) == 1 or len(typeset) == 0 or len(typeset) == 2:
+                for each_hashtag in current_hashtags:
+                    usetext = usetext.replace(each_hashtag, "")
+                newtext = re.sub(r'\*{2}([\S\s]+)\*{2}', r'<strong>\1</strong>', usetext)
+                newtext = re.sub(r'\_{2}([\S\s]+)\_{2}', r'<em>\1</em>', newtext)
+                steptext = re.sub(r'\&', '&amp;', newtext)
+                fintext = re.sub(r'\[([\S\s]+)\]\((http(\S)+)\)', r'<a href="\2">\1</a>', steptext)
+                print(usetext)
+                ret_parent_ht = list(set(parent_ht + grandparent_ht))
+                current_hashtags_lst = ret_hash + ret_parent_ht
 
-                    curr_hashtags_prime = ', '.join(current_hashtags_lst)
-                    curr_hashtags = ''
-                    if dec_refs and refs: 
-                        curr_hashtags = refs + ', ' + dec_refs + ', ' + curr_hashtags_prime
-                    elif dec_refs:
-                        curr_hashtags = dec_refs + ', ' + curr_hashtags_prime
-                    elif refs:
-                        curr_hashtags = refs + ', ' + curr_hashtags_prime
-                    
-                    else:
-                        curr_hashtags = curr_hashtags_prime
-                    #ret_hash_parent = ', '.join(ret_parent_ht)
-                 
-                    if valid: #writing to CSV
-                        writer.writerow(['', '', current_type, display, '', '', new_nest, fintext, '', '', '', '']+ [curr_hashtags])
-                    line_number += 1
+                curr_hashtags_prime = ', '.join(current_hashtags_lst)
+                curr_hashtags = ''
+                if dec_refs and refs: 
+                    curr_hashtags = refs + ', ' + dec_refs + ', ' + curr_hashtags_prime
+                elif dec_refs:
+                    curr_hashtags = dec_refs + ', ' + curr_hashtags_prime
+                elif refs:
+                    curr_hashtags = refs + ', ' + curr_hashtags_prime
+                
+                else:
+                    curr_hashtags = curr_hashtags_prime
+                #ret_hash_parent = ', '.join(ret_parent_ht)
+             
+                writer.writerow(['', '', current_type, display, '', '', new_nest, fintext, '', '', '', '']+ [curr_hashtags])
+                line_number += 1
 
-            new_parent = usetext
-            new_depth = len(curr_outline[i])
-            convert_to_CSV_help(curr_outline[i], current_topic, numer, current_type, level_temp, False, 
-                                new_nest, parent=new_parent, 
-                                depth=new_depth, parent_ht=new_parent_ht, grandparent_ht=parent_ht, 
-                                topic_number=new_topic_number, arabic=arabic_tag) 
+        new_parent = usetext
+        new_depth = len(curr_outline[i])
+        convert_children(curr_outline[i], current_topic, numer, current_type, level_temp, False, 
+                            new_nest, parent=new_parent, 
+                            depth=new_depth, parent_ht=new_parent_ht, grandparent_ht=parent_ht, 
+                            topic_number=new_topic_number, arabic=arabic_tag) 
     return
 
 
