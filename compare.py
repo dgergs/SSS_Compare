@@ -8,7 +8,7 @@ output_filetwo = []
 initial = False
 
 try:
-    myfile = open('we.csv', 'r', encoding='UTF-8', errors='ignore', newline='')
+    myfile = open('cur_website.csv', 'r', encoding='UTF-8', errors='ignore', newline='')
     with myfile as t1:
         reader1 = csv.reader(t1)
         fileone = list(reader1)
@@ -58,7 +58,7 @@ with open('to_test.csv', 'w') as outFile:
                         elif fileone[i][3] != filetwo[x][3]:
                             writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #display off
                         else:
-                            writer.writerow(filetwo[x] + ['','','','','','','','','']  + ['UPDATE']) #everything same
+                            writer.writerow(filetwo[x] + ['','','','','','','','','']  + ['']) #everything same
                         x += 1
                         i += 1
                     elif test_text_1 != test_text_2:
