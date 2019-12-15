@@ -96,12 +96,12 @@ def convert_to_CSV_help(curr_outline, current_topic="", numer="", current_type="
                 for each_hashtag in current_hashtags:
                     usetext = usetext.replace(each_hashtag, "") #removing hashtags from usetext
                 curr_hashtags = ', '.join(current_hashtags)
-                newtext = re.sub(r'\*{2}([\S\s]+)\*{2}', r'<strong>\1</strong>', usetext)
-                newtext = re.sub(r'\_{2}([\S\s]+)\_{2}', r'<em>\1</em>', newtext)
-                newtext = re.sub(r'\&amp\;', r'\&', newtext)
+                newtext = re.sub(r'\*{2}([\S\s]+?)\*{2}', r'<strong>\1</strong>', usetext)
+                newtext = re.sub(r'\_{2}([\S\s]+?)\_{2}', r'<em>\1</em>', newtext)
+                #newtext = re.sub(r'\&amp\;', r'\&', newtext)
 
                 if startCSV: #actually writing to the CSV
-                    writer.writerow(['', '', current_type, 'topic', '', '', new_nest, newtext, '', '', '', '']+ [curr_hashtags])
+                    writer.writerow(['', '', current_type, 'topic', '', '', new_nest, newtext, '', '', '', ''] + [curr_hashtags])
                     line_number += 1
 
             new_parent = usetext
@@ -128,7 +128,7 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
             if current_type == '#ex.g':
                 current_type = 'Exemplary Quotes'
             elif current_type == '#ex.b':
-                current_type = 'Cautionary Quotes: Mistakes, Misconceptions, & Misunderstanding'
+                current_type = 'Cautionary Quotes: Mistakes, Misconceptions, &amp; Misunderstanding'
             else:
                 current_type = re.sub(r'[^a-zA-Z,:& ]+', '', current_type)
                 current_type = current_type.lower().capitalize()
@@ -194,9 +194,10 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
         if len(typeset) == 1 or len(typeset) == 0 or len(typeset) == 2:
                 for each_hashtag in current_hashtags:
                     usetext = usetext.replace(each_hashtag, "")
-                newtext = re.sub(r'\*{2}([\S\s]+)\*{2}', r'<strong>\1</strong>', usetext)
-                newtext = re.sub(r'\_{2}([\S\s]+)\_{2}', r'<em>\1</em>', newtext)
-                steptext = re.sub(r'\&amp\;', r'\&', newtext)
+                newtext = re.sub(r'\*{2}([\S\s]+?)\*{2}', r'<strong>\1</strong>', usetext)
+                steptext = re.sub(r'\_{2}([\S\s]+?)\_{2}', r'<em>\1</em>', newtext)
+                #steptext = re.sub(r'\&amp\;', r'\&', newtext)
+                #normal_links = re.sub(r'([\S\s]+)(http(\S)+)', r'\1 <a href="\2">\2</a>', steptext)
                 fintext = re.sub(r'\[([\S\s]+)\]\((http(\S)+)\)', r'<a href="\2">\1</a>', steptext)
                 ret_parent_ht = list(set(parent_ht + grandparent_ht))
                 current_hashtags_lst = ret_hash + ret_parent_ht
