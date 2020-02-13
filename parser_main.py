@@ -214,6 +214,9 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
                 else:
                     curr_hashtags = curr_hashtags_prime
                 #ret_hash_parent = ', '.join(ret_parent_ht)
+
+                if '#vd' in curr_hashtags or '#bc' in curr_hashtags:
+                    curr_hashtags += ', #prv'
              
                 writer.writerow(['', '', current_type, display, '', '', new_nest, fintext, '', '', '', '']+ [curr_hashtags])
                 line_number += 1
@@ -230,7 +233,8 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
 
 #The code to actually call the helper function, be careful putting this in it's own fuction. 
 #I ran into issues with nonlocal variables so it's easiest to keep it in the global frame. 
-OPML_outline = opml.parse(OPML_filename)
+opml_name = input("What is the saved dynalist CSV name?")
+OPML_outline = opml.parse(opml_name)
 CSVfile = open(desired_CSV_name, 'w', errors='ignore', newline='')
 writer = csv.writer(CSVfile)
 writer.writerow(['(Numeral)', '(Current Topic)', 'Current Type', 'Display', '(Topic Number)', '(Ordinal Number)', 'Level', 'Text', '(#h)', '(#SP2014)', '(#Answer)', '(#pp)', 'Hashtags', '(Parent)', '(Number of Children)', '(Parent Hashtags)', '(Level 1)', '(Level 2)', '(Level 3)', '(Level 4)', '(Level 5)', '(Level 6)'])

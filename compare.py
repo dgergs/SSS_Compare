@@ -51,18 +51,22 @@ with open('to_test.csv', 'w') as outFile:
                         x += 1
                         continue
                     elif test_text_1 == test_text_2:
-                        if set(fileone[i][11]) != set(filetwo[x][11]):
+                        if set(fileone[i][12]) != set(filetwo[x][12]):
                             writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #tags off
+                            print('a')
                         elif fileone[i][2] != filetwo[x][2]:
                             writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #type off
+                            print('b')
                         elif fileone[i][3] != filetwo[x][3]:
                             writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #display off
+                            print('c')
                         else:
                             writer.writerow(filetwo[x] + ['','','','','','','','','']  + ['']) #everything same
                         x += 1
                         i += 1
                     elif test_text_1 != test_text_2:
                         writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #text off
+                        print("e")
                         x += 1
                         i += 1
                 
