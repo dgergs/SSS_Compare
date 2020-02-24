@@ -8,14 +8,14 @@ output_filetwo = []
 initial = False
 
 try:
-    myfile = open('cur_website.csv', 'r', encoding='UTF-8', errors='ignore', newline='')
+    myfile = open('old_site.csv', 'r', encoding='UTF-8', errors='ignore', newline='')
     with myfile as t1:
         reader1 = csv.reader(t1)
         fileone = list(reader1)
 except FileNotFoundError:
     initial =  True
 
-with open('output.csv', 'r', encoding='UTF-8', errors='ignore', newline='') as t2:
+with open('website_data.csv', 'r', encoding='UTF-8', errors='ignore', newline='') as t2:
     reader2 = csv.reader(t2)
     filetwo = list(reader2)
 
@@ -53,20 +53,20 @@ with open('to_test.csv', 'w') as outFile:
                     elif test_text_1 == test_text_2:
                         if set(fileone[i][12]) != set(filetwo[x][12]):
                             writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #tags off
-                            print('a')
+
                         elif fileone[i][2] != filetwo[x][2]:
                             writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #type off
-                            print('b')
+               
                         elif fileone[i][3] != filetwo[x][3]:
                             writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #display off
-                            print('c')
+                       
                         else:
                             writer.writerow(filetwo[x] + ['','','','','','','','','']  + ['']) #everything same
                         x += 1
                         i += 1
                     elif test_text_1 != test_text_2:
                         writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['UPDATE']) #text off
-                        print("e")
+         
                         x += 1
                         i += 1
                 

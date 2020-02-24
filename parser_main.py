@@ -7,9 +7,9 @@
 import csv
 import opml
 import re
-import markdown
+# import markdown
 
-#md = markdown.markdown()
+# md = markdown.Markdown()
 
 typenames = ["OVERVIEW", "OVERVIEW:", "RESOURCES","CHAPTER","VIDEO","EXAMPLES", "EXAMPLES ","EXEMPLARY","CAUTIONARY","#ex.g","#ex.b","goals","ATTITUDES__","__ATTITUDES__","ACQUISITION__","ACQUISITION","APPLICATION__","APPLICATION","ELEMENTS","Readings","Clicker","Discussion","Exercises","Practice","ASSESSMENTS"]
 
@@ -24,8 +24,8 @@ On terminal (for my mac at least), run "ipython OPML_to_CSV.py" in the same dire
 A CSV will be written to the same directory
 """
 
-OPML_filename = "dynalist.opml" #Make sure this is a string and ends .opml EX: "SSS_04_01_19.opml"
-desired_CSV_name = "output.csv" #Make sure this ends .csv
+OPML_filename = "website_data.opml" #Make sure this is a string and ends .opml EX: "SSS_04_01_19.opml"
+desired_CSV_name = "website_data.csv" #Make sure this ends .csv
 
 def convert_to_CSV_help(curr_outline, current_topic="", numer="", current_type="", level_list=[], 
                         highest_level=True, nest="", h=0, sp2014=0, answer=0, pp=0, parent='', 
@@ -58,7 +58,7 @@ def convert_to_CSV_help(curr_outline, current_topic="", numer="", current_type="
     if len(curr_outline) == 0:
         return
     if highest_level:
-        for i in range(6, 33): #this can be changed, this makes sure to only through topics as the dynalist is currently written
+        for i in range(6, 32): #this can be changed, this makes sure to only through topics as the dynalist is currently written
             startCSV = False
             usetext = curr_outline[i].text
             current_hashtags = [x for x in usetext.split() if x.startswith('#')]
@@ -178,6 +178,8 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
                     pp=1
                 if "#as" == current_hashtags[idx]:
                     pp=1
+                if "#vd" == current_hashtags[idx] or "#bc" == current_hashtags[idx] or "#curate" == current_hashtags[idx]:
+                    ret_hash.append("#draft")
                 updated = re.sub(r'[^#a-zA-Z0-9\.]+', '', current_hashtags[idx])
                 ret_hash.append(updated)
             
@@ -197,7 +199,7 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
                 newtext = re.sub(r'\*{2}([\S\s]+?)\*{2}', r'<strong>\1</strong>', usetext)
                 steptext = re.sub(r'\_{2}([\S\s]+?)\_{2}', r'<em>\1</em>', newtext)
                 #steptext = re.sub(r'\&amp\;', r'\&', newtext)
-                #normal_links = re.sub(r'([\S\s]+)(http(\S)+)', r'\1 <a href="\2">\2</a>', steptext)
+                #normal_links = re.sub(r'(source:)[\s]+?(http(\S)+)', r'\1 <a href="\2">\2</a>', steptext)
                 fintext = re.sub(r'\[([\S\s]+)\]\((http(\S)+)\)', r'<a href="\2">\1</a>', steptext)
                 ret_parent_ht = list(set(parent_ht + grandparent_ht))
                 current_hashtags_lst = ret_hash + ret_parent_ht
@@ -210,13 +212,9 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
                     curr_hashtags = dec_refs + ', ' + curr_hashtags_prime
                 elif refs:
                     curr_hashtags = refs + ', ' + curr_hashtags_prime
-                
                 else:
                     curr_hashtags = curr_hashtags_prime
                 #ret_hash_parent = ', '.join(ret_parent_ht)
-
-                if '#vd' in curr_hashtags or '#bc' in curr_hashtags:
-                    curr_hashtags += ', #prv'
              
                 writer.writerow(['', '', current_type, display, '', '', new_nest, fintext, '', '', '', '']+ [curr_hashtags])
                 line_number += 1
@@ -233,8 +231,8 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
 
 #The code to actually call the helper function, be careful putting this in it's own fuction. 
 #I ran into issues with nonlocal variables so it's easiest to keep it in the global frame. 
-opml_name = input("What is the saved dynalist CSV name?")
-OPML_outline = opml.parse(opml_name)
+opml_file = input("What is the OPML file name being uploaded?")
+OPML_outline = opml.parse(opml_file)
 CSVfile = open(desired_CSV_name, 'w', errors='ignore', newline='')
 writer = csv.writer(CSVfile)
 writer.writerow(['(Numeral)', '(Current Topic)', 'Current Type', 'Display', '(Topic Number)', '(Ordinal Number)', 'Level', 'Text', '(#h)', '(#SP2014)', '(#Answer)', '(#pp)', 'Hashtags', '(Parent)', '(Number of Children)', '(Parent Hashtags)', '(Level 1)', '(Level 2)', '(Level 3)', '(Level 4)', '(Level 5)', '(Level 6)'])
