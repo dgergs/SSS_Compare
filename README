@@ -1,0 +1,3 @@
+Very straight forward, this code takes a downloaded version (OPML) from dynalist and reformats it to a CSV which is passed into a drupal site. 
+
+First run "parser_main.py" and then "compare.py". 
