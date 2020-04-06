@@ -178,7 +178,9 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
                     pp=1
                 if "#as" == current_hashtags[idx]:
                     pp=1
-                if "#vd" == current_hashtags[idx] or "#bc" == current_hashtags[idx] or "#curate" == current_hashtags[idx]:
+                if  "#vd" == current_hashtags[idx] or "#bc" == current_hashtags[idx]:
+                    ret_hash.append("#pp4")
+                if "#curate" == current_hashtags[idx]:
                     ret_hash.append("#draft")
                 updated = re.sub(r'[^#a-zA-Z0-9\.]+', '', current_hashtags[idx])
                 ret_hash.append(updated)
@@ -231,8 +233,8 @@ def convert_children(curr_outline, current_topic="", numer="", current_type="", 
 
 #The code to actually call the helper function, be careful putting this in it's own fuction. 
 #I ran into issues with nonlocal variables so it's easiest to keep it in the global frame. 
-opml_file = input("What is the OPML file name being uploaded?")
-OPML_outline = opml.parse(opml_file)
+#opml_file = input("What is the OPML file name being uploaded?")
+OPML_outline = opml.parse("data.opml")
 CSVfile = open(desired_CSV_name, 'w', errors='ignore', newline='')
 writer = csv.writer(CSVfile)
 writer.writerow(['(Numeral)', '(Current Topic)', 'Current Type', 'Display', '(Topic Number)', '(Ordinal Number)', 'Level', 'Text', '(#h)', '(#SP2014)', '(#Answer)', '(#pp)', 'Hashtags', '(Parent)', '(Number of Children)', '(Parent Hashtags)', '(Level 1)', '(Level 2)', '(Level 3)', '(Level 4)', '(Level 5)', '(Level 6)'])

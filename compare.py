@@ -70,7 +70,7 @@ with open('to_test.csv', 'w') as outFile:
                         x += 1
                         i += 1
                 
-            if x < len(filetwo):
+            elif x < len(filetwo):
                 if filetwo[x][6] not in levels1:
                     flag2 = False
                     writer.writerow(filetwo[x] + ['','','','','','','','',''] + ['ADD']) #only on drupal
