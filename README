@@ -1,12 +1,12 @@
-This is for the use of Sense & Sensibility & Science course staff to update our website. Instructions are subject to change. 
+This is for the use of Sense & Sensibility & Science course staff to update our website. Instructions are subject to change. This is the link to the GitHub, https://github.com/dgergs/SSS_Compare
 
-Prerequisits:
-	-Instructions below are inteded for use on Macs, some commands may be different on other types of computers. 
+Prerequisites:
+	-Instructions below are intended for use on Macs, some commands may be different on other types of computers. 
 	-Make sure Python 3.x is downloaded on your computer
 		-To check this, go to terminal and type "python3 --version" 
 		-If it's not downloaded,
 			-https://www.python.org/downloads/
-	-Downlaod the OPML package 
+	-Download the OPML package 
 		-Info here: https://pypi.org/project/opml/
 		-To download, type "pip install opml" into terminal
 			-If pip is not installed on your computer
@@ -14,7 +14,7 @@ Prerequisits:
 			
 Usage:
 	-Download current data
-		-First download the most recent S&S&S dynalist
+		-First download the most recent S&S&S content Dynalist
 			-https://dynalist.io/d/5C57sPjItqfxzkIkeFm9w_Dr
 		-Rename the correct .opml file to be named "data.opml"
 		-Next, download the most recent version of site data from Pantheon 
@@ -29,4 +29,4 @@ Usage:
 	-Upload this CSV to the Pantheon
 
 Maintenance
-	Everytime we make a change, simply download the most updated version here from github. 
+	Every time we make a change, simply download the most updated version here from GitHub. 
