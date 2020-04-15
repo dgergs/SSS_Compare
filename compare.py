@@ -1,4 +1,5 @@
 import csv
+import datetime
 
 fileone = []
 filetwo = []
@@ -19,8 +20,10 @@ with open('website_data.csv', 'r', encoding='UTF-8', errors='ignore', newline=''
     reader2 = csv.reader(t2)
     filetwo = list(reader2)
 
-
-with open('to_test.csv', 'w') as outFile:
+x = datetime.datetime.now()
+ret_name = 'upload_' + x.strftime("%Y") + '_' + x.strftime("%m") + '_' + x.strftime("%d") + '.csv'
+print(ret_name)
+with open(ret_name, 'w') as outFile:
     writer = csv.writer(outFile, lineterminator='\n')
     writer.writerow(filetwo[0] + ['Website Change'])
 
