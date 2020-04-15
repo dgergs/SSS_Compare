@@ -4,29 +4,41 @@ Prerequisites:
 	-Instructions below are intended for use on Macs, some commands may be different on other types of computers. 
 	-Make sure Python 3.x is downloaded on your computer
 		-To check this, go to terminal and type "python3 --version" 
-		-If it's not downloaded,
+		-If it's not downloaded, use the link below
 			-https://www.python.org/downloads/
 	-Download the OPML package 
 		-Info here: https://pypi.org/project/opml/
+		-OPML is the package that dynalist uses to format data, so there is no getting around downloading this package.
 		-To download, type "pip install opml" into terminal
-			-If pip is not installed on your computer
+			-If pip is not installed on your computer...
 				-Type this command into terminal "sudo easy_install pip"
+			-If you get weird opml errors later in the process...
+				-Try using "pip3" instead of "pip" to install opml
+				-You might need to upgrade pip
+					-Pip is now on version 20.x, so make sure yours is at least close
+						-Version can be checked with "pip --version"
+					-Use the command "pip install -U pip" in terminal to upgrade your version
+			
 			
 Usage:
+	-Download the most recent code from GitHub
+		-https://github.com/dgergs/SSS_Compare/
+		-Click "Clone or Download" and press "Download ZIP"
 	-Download current data
-		-First download the most recent S&S&S content Dynalist
+		-First download the most recent S&S&S content Dynalist (you'll need to login)
 			-https://dynalist.io/d/5C57sPjItqfxzkIkeFm9w_Dr
 		-Rename the correct .opml file to be named "data.opml"
-		-Next, download the most recent version of site data from Pantheon 
+		-Next, download the most recent version of site data from Pantheon (you'll need to login)
 			-https://test-uc-sss.pantheon.berkeley.edu/admin/ucsss/import
 				-click the link "download an export"
 		-Rename the .csv file to be named "old_site.csv"
-	-Place both of these files into the folder containing the code (same one this document is in)
-	-Using Terminal, navigate into the current folder
+	-Place both of these files, "data.opml and "old_site.csv", into the folder "SSS_Compare-master"
+	-Using Terminal, navigate into the "SSS_Compare-master" folder
 		-If you save the folder to your desktop, type "cd Desktop/SSS_Compare"
-	-Type the following command "python3 main.py"
-	-In the folder we are using, make sure that the file "upload_2020_XX_XX.csv" was created
-	-Upload this CSV to the Pantheon
+		-Once you think you're in the correct folder, type the command "ls" into terminal to confirm
+	-Type the following command "python3 main.py" into terminal
+	-In the same "SSS_Compare-master" folder, make sure that the file "upload_2020_XX_XX.csv" was created
+	-Upload this CSV to the Pantheon TEST site (linked above)
 
-Maintenance
-	Every time we make a change, simply download the most updated version here from GitHub. 
+Maintenance:
+	Every time we make a change to the structure, simply download the most updated version here from GitHub. 
