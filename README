@@ -1,3 +1,32 @@
-Very straight forward, this code takes a downloaded version (OPML) from dynalist and reformats it to a CSV which is passed into a drupal site. 
+This is for the use of Sense & Sensibility & Science course staff to update our website. Instructions are subject to change. 
 
-First run "parser_main.py" and then "compare.py". 
+Prerequisits:
+	-Instructions below are inteded for use on Macs, some commands may be different on other types of computers. 
+	-Make sure Python 3.x is downloaded on your computer
+		-To check this, go to terminal and type "python3 --version" 
+		-If it's not downloaded,
+			-https://www.python.org/downloads/
+	-Downlaod the OPML package 
+		-Info here: https://pypi.org/project/opml/
+		-To download, type "pip install opml" into terminal
+			-If pip is not installed on your computer
+				-Type this command into terminal "sudo easy_install pip"
+			
+Usage:
+	-Download current data
+		-First download the most recent S&S&S dynalist
+			-https://dynalist.io/d/5C57sPjItqfxzkIkeFm9w_Dr
+		-Rename the correct .opml file to be named "data.opml"
+		-Next, download the most recent version of site data from Pantheon 
+			-https://test-uc-sss.pantheon.berkeley.edu/admin/ucsss/import
+				-click the link "download an export"
+		-Rename the .csv file to be named "old_site.csv"
+	-Place both of these files into the folder containing the code (same one this document is in)
+	-Using Terminal, navigate into the current folder
+		-If you save the folder to your desktop, type "cd Desktop/SSS_Compare"
+	-Type the following command "python3 main.py"
+	-In the folder we are using, make sure that the file "upload_2020_XX_XX.csv" was created
+	-Upload this CSV to the Pantheon
+
+Maintenance
+	Everytime we make a change, simply download the most updated version here from github. 
